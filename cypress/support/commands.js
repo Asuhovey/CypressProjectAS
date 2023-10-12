@@ -23,3 +23,35 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+// Cypress.Commands.add('login', () => {
+    
+//     // Используйте переменные окружения из файла .env
+//     cy.get('#UserID').type(Cypress.env('username'));
+//     cy.get('#Password').type(Cypress.env('password'));
+  
+//     cy.get('form').submit();
+//   });
+
+import LoginPage from '../page-objects/LoginPage';
+
+  Cypress.Commands.add('login', () => {
+
+    const loginPage=new LoginPage()
+    cy.visit('https://mailfence.com/')
+    loginPage.getLogInButton().click()
+    cy.get('#UserID').type(Cypress.env('username'));
+    cy.get('#Password').type(Cypress.env('password'));
+    cy.get('.btn').click()
+  });
+
+  Cypress.Commands.add('login', () => {
+
+    const loginPage=new LoginPage()
+    loginPage.getLogInButton().click()
+    cy.get('#UserID').type(Cypress.env('username'));
+    cy.get('#Password').type(Cypress.env('password'));
+    cy.get('.btn').click()
+  });
+
+  
