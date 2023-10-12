@@ -1,0 +1,7 @@
+{
+    "subjectEmail": "Test Email",
+    "filePath": "cypress/downloads", 
+    "attachmentName": "TestAttachment1",
+    "attachmentExtension": "txt",
+    "attachmentText": "Text of the attachment"
+}
