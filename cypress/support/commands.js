@@ -33,6 +33,7 @@
 //     cy.get('form').submit();
 //   });
 
+import Buttons from '../page-objects/Buttons';
 import LoginPage from '../page-objects/LoginPage';
 import PageBody from '../page-objects/PageBody';
 
@@ -71,8 +72,8 @@ Cypress.Commands.add('generateAttachment', (filePath, attachmentName, attachment
   cy.readFile(`${filePath}\\${attachmentName}.${attachmentExtension}`).should("not.be.null");
 })
 
-Cypress.Commands.add("uploadNewDocumentOnDocumentPage", (path, id) => {
-  cy.fixture('test1_test_data.json').then((testData) => {
+Cypress.Commands.add("uploadNewDocumentOnEmailPage", (path, id) => {
+  cy.fixture('fileAttachment.json').then((testData) => {
     const filePath = testData.filePath;
     const attachmentName = testData.attachmentName;
     const attachmentExtension = testData.attachmentExtension;
@@ -104,3 +105,77 @@ Cypress.Commands.add("uploadNewDocumentOnDocumentPage", (path, id) => {
     });
   });
 });
+
+Cypress.Commands.add("uploadNewDocumentOnDocumentPage", (path, url) => {
+  url = `/sw?type=doc&state=26&gwt=1&oidDir=465459611`;
+  cy.intercept(url).as(`uploadDocument`);
+  cy.get("#new_doc input[type=file]", {timeout: 10000}).selectFile(path, { action: "select", force: true });
+  cy.wait(`@uploadDocument`);
+
+  
+})
+
+Cypress.Commands.add("clearInboxEmails", () => {
+  cy.get('.icon24-Message').click()
+  cy.get('.treeItemLabel#treeInbox').click()
+  cy.checkIfAnyExistElementsInEmail('.icon.icon-checkb')
+})
+
+
+Cypress.Commands.add("clearDocuments", () => {
+  cy.get('.icon24-Documents.toolImg').click()
+  cy.get('.GCSDBRWBCX.treeItemRoot.GCSDBRWBKX.nodeSel').click()
+  cy.checkIfAnyExistElementsInDocuments()
+  
+})
+
+Cypress.Commands.add("clearEnvironment", () => {
+  cy.visit('https://mailfence.com/')
+  cy.login()
+  
+  cy.clearInboxEmails()
+    cy.clearDocuments()
+
+
+
+})
+
+
+Cypress.Commands.add("checkIfAnyExistElementsInEmail", () => {
+  cy.get('.icon.icon-checkb').click()
+  //cy.get('.GCSDBRWBO.tbBtn.afterSep.GCSDBRWBFV[title="To Trash"]')
+  
+  const buttons=new Buttons()
+    cy.wait(5000)
+    
+    buttons.getButtons().then((buttones) => {
+      const countOfElementsInButtons = buttones.find('.GCSDBRWBO.tbBtn.afterSep.GCSDBRWBFV.tbBtnDisabled').length;
+      cy.wait(5000)
+      if (countOfElementsInButtons > 0) {
+          cy.get('#mailNewBtn').click();
+          cy.log('Buttons are disabled')}
+          else{
+            cy.get('.GCSDBRWBO.tbBtn.afterSep.GCSDBRWBFV[title="To Trash"]').click()
+          }
+})
+})
+
+Cypress.Commands.add("checkIfAnyExistElementsInDocuments", () => {
+  cy.get('.icon.icon-checkb').click()
+  //cy.get('.GCSDBRWBO.tbBtn.afterSep.GCSDBRWBFV[title="To Trash"]')
+  
+  const buttons = new Buttons()
+    cy.wait(5000)
+    
+    buttons.getButtons().then((buttones) => {
+      const countOfElementsInButtons = buttones.find('.GCSDBRWBO.tbBtn.afterSep.GCSDBRWBFV.tbBtnDisabled').length;
+      cy.wait(5000)
+      if (countOfElementsInButtons > 1) {
+          cy.get('#mailNewBtn').click();
+          cy.log('Buttons are disabled')}
+          else{
+            cy.get('.GCSDBRWBO.tbBtn.afterSep.GCSDBRWBFV[title="To Trash"]').click()
+          }
+})
+
+})
