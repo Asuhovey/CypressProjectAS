@@ -33,7 +33,8 @@
 //     cy.get('form').submit();
 //   });
 
-import Buttons from '../page-objects/Buttons';
+import ButtonsOfTheDocuments from '../page-objects/ButtonsOfTheDocuments';
+import ButtonsOfTheInboxEmail from '../page-objects/ButtonsOfTheInboxEmail';
 import LoginPage from '../page-objects/LoginPage';
 import PageBody from '../page-objects/PageBody';
 
@@ -142,10 +143,11 @@ Cypress.Commands.add("clearEnvironment", () => {
 
 
 Cypress.Commands.add("checkIfAnyExistElementsInEmail", () => {
+  cy.wait(3500)
   cy.get('.icon.icon-checkb').click()
   //cy.get('.GCSDBRWBO.tbBtn.afterSep.GCSDBRWBFV[title="To Trash"]')
   
-  const buttons=new Buttons()
+  const buttons=new ButtonsOfTheInboxEmail()
     cy.wait(5000)
     
     buttons.getButtons().then((buttones) => {
@@ -161,14 +163,15 @@ Cypress.Commands.add("checkIfAnyExistElementsInEmail", () => {
 })
 
 Cypress.Commands.add("checkIfAnyExistElementsInDocuments", () => {
+  cy.wait(3500)
   cy.get('.icon.icon-checkb').click()
   //cy.get('.GCSDBRWBO.tbBtn.afterSep.GCSDBRWBFV[title="To Trash"]')
   
-  const buttons = new Buttons()
+  const buttons = new ButtonsOfTheDocuments()
     cy.wait(5000)
     
-    buttons.getButtons().then((buttones) => {
-      const countOfElementsInButtons = buttones.find('.GCSDBRWBO.tbBtn.afterSep.GCSDBRWBFV.tbBtnDisabled').length;
+    buttons.getButtons().then(($buttones) => {
+      const countOfElementsInButtons = $buttones.find('.GCSDBRWBO.tbBtn.afterSep.GCSDBRWBFV.tbBtnDisabled').length;
       cy.wait(5000)
       if (countOfElementsInButtons > 1) {
           cy.get('#mailNewBtn').click();
