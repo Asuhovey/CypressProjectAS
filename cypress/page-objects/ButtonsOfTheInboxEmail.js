@@ -1,7 +1,7 @@
 // ButtonsOfTheInboxEmail.js
 class ButtonsOfTheInboxEmail {
     getButtons() {
-      return cy.get('div.GCSDBRWBDQC'); // Пример селектора
+      return cy.get('div.GCSDBRWBMQC'); // Пример селектора
     }
   }
   

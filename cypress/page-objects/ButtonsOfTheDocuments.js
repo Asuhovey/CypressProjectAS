@@ -1,7 +1,7 @@
 // ButtonsOfTheDocuments.js
 class ButtonsOfTheDocuments {
-    getButtons() {
-      return cy.get('.GCSDBRWBO.GCSDBRWBHDC'); // Пример селектора
+    getListOfDocElements() {
+      return cy.get('.GCSDBRWBO.GCSDBRWBAEC'); // Пример селектора
     }
   }
   

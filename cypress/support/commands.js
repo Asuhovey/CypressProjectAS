@@ -32,7 +32,7 @@
   
 //     cy.get('form').submit();
 //   });
-
+import AllItemsInDocumentList from '../page-objects/AllItemsInDocumentList';
 import ButtonsOfTheDocuments from '../page-objects/ButtonsOfTheDocuments';
 import ButtonsOfTheInboxEmail from '../page-objects/ButtonsOfTheInboxEmail';
 import LoginPage from '../page-objects/LoginPage';
@@ -125,7 +125,7 @@ Cypress.Commands.add("clearInboxEmails", () => {
 
 Cypress.Commands.add("clearDocuments", () => {
   cy.get('.icon24-Documents.toolImg').click()
-  cy.get('.GCSDBRWBCX.treeItemRoot.GCSDBRWBKX.nodeSel').click()
+  cy.get('.GCSDBRWBDX.treeItemRoot.GCSDBRWBLX.nodeSel').click()
   cy.checkIfAnyExistElementsInDocuments()
   
 })
@@ -135,8 +135,9 @@ Cypress.Commands.add("clearEnvironment", () => {
   cy.login()
   
   cy.clearInboxEmails()
-    cy.clearDocuments()
-
+  cy.clearDocuments()
+  
+  
 
 
 })
@@ -145,19 +146,19 @@ Cypress.Commands.add("clearEnvironment", () => {
 Cypress.Commands.add("checkIfAnyExistElementsInEmail", () => {
   cy.wait(3500)
   cy.get('.icon.icon-checkb').click()
-  //cy.get('.GCSDBRWBO.tbBtn.afterSep.GCSDBRWBFV[title="To Trash"]')
   
   const buttons=new ButtonsOfTheInboxEmail()
     cy.wait(5000)
     
     buttons.getButtons().then((buttones) => {
-      const countOfElementsInButtons = buttones.find('.GCSDBRWBO.tbBtn.afterSep.GCSDBRWBFV.tbBtnDisabled').length;
+      const countOfElementsInButtons = buttones.find('.GCSDBRWBO.tbBtn.afterSep.GCSDBRWBFV.tbBtnDisabled[title="To Trash"]').length;
+
       cy.wait(5000)
+
       if (countOfElementsInButtons > 0) {
-          cy.get('#mailNewBtn').click();
-          cy.log('Buttons are disabled')}
+          cy.log('Email Inbox tab is empty')}
           else{
-            cy.get('.GCSDBRWBO.tbBtn.afterSep.GCSDBRWBFV[title="To Trash"]').click()
+            cy.get('.GCSDBRWBO.tbBtn.afterSep.GCSDBRWBGV[title="To Trash"]').click()
           }
 })
 })
@@ -165,20 +166,31 @@ Cypress.Commands.add("checkIfAnyExistElementsInEmail", () => {
 Cypress.Commands.add("checkIfAnyExistElementsInDocuments", () => {
   cy.wait(3500)
   cy.get('.icon.icon-checkb').click()
-  //cy.get('.GCSDBRWBO.tbBtn.afterSep.GCSDBRWBFV[title="To Trash"]')
   
   const buttons = new ButtonsOfTheDocuments()
+
     cy.wait(5000)
     
-    buttons.getButtons().then(($buttones) => {
-      const countOfElementsInButtons = $buttones.find('.GCSDBRWBO.tbBtn.afterSep.GCSDBRWBFV.tbBtnDisabled').length;
+    buttons.getListOfDocElements().then(($frt) => {
+      const countOfElementsInButtons = $frt.find('.GCSDBRWBO.tbBtn.afterSep.GCSDBRWBFV.tbBtnDisabled[title="To Trash"]').length;
       cy.wait(5000)
-      if (countOfElementsInButtons > 1) {
-          cy.get('#mailNewBtn').click();
-          cy.log('Buttons are disabled')}
-          else{
-            cy.get('.GCSDBRWBO.tbBtn.afterSep.GCSDBRWBFV[title="To Trash"]').click()
-          }
-})
 
+      if (countOfElementsInButtons > 0) {
+        cy.log('Attachments are not occured')}
+        else{
+          //const name = cy.get('.GCSDBRWBBU.GCSDBRWBDU.trow').should('have.text',"")
+          cy.get('.GCSDBRWBO.tbBtn.afterSep.GCSDBRWBGV[title="To Trash"]').click().then(() => {
+            const list = new AllItemsInDocumentList()
+            list.getListItems().then(($listItems)=>{
+              const elementsList = $listItems.find('.GCSDBRWBBU').length
+
+              if (elementsList > 0){
+                cy.log("Attachments are not deleted!")
+              } else {
+                cy.log("Attachments are deleted successfully")
+              }
+            })
+          })
+}
+})
 })
