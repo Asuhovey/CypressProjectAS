@@ -25,36 +25,38 @@
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
 // Cypress.Commands.add('login', () => {
-    
+
 //     // Используйте переменные окружения из файла .env
 //     cy.get('#UserID').type(Cypress.env('username'));
 //     cy.get('#Password').type(Cypress.env('password'));
-  
+
 //     cy.get('form').submit();
 //   });
+import ItemsInTheDocList from '../page-objects/ItemsInTheDocList';
 import AllItemsInDocumentList from '../page-objects/AllItemsInDocumentList';
 import ButtonsOfTheDocuments from '../page-objects/ButtonsOfTheDocuments';
 import ButtonsOfTheInboxEmail from '../page-objects/ButtonsOfTheInboxEmail';
 import LoginPage from '../page-objects/LoginPage';
 import PageBody from '../page-objects/PageBody';
 
-// Command#1 of identifing the fields and logining 
+// Command#1 of identifing the fields and logining
   Cypress.Commands.add('login', () => {
 
     const loginPage=new LoginPage()
-    cy.visit('https://mailfence.com/')
     loginPage.getLogInButton().click()
     cy.get('#UserID').type(Cypress.env('username'));
     cy.get('#Password').type(Cypress.env('password'));
-    cy.get('.btn').click()
+    cy.get('.btn').click().then(()=>{
+      cy.get('.icon24-Message', {timeout: 10000}).should('be.visible')
+    })
   });
 // Command#2 of checking if the test on the email tab (need to rework with some POMs and removing the WAITs)
   Cypress.Commands.add('checkIfOnMailTab', () => {
 
     const pageBody=new PageBody()
     cy.wait(5000)
-    
-    pageBody.getPageBody.then((body) => {
+
+    pageBody.getPageBody().then((body) => {
       const countOfElementsInBody = body.find('.listSubject').length;
       cy.wait(5000)
       if (countOfElementsInBody > 0) {
@@ -68,10 +70,83 @@ import PageBody from '../page-objects/PageBody';
 
 })
 
-Cypress.Commands.add('generateAttachment', (filePath, attachmentName, attachmentExtension, attachmentText)=> { 
+Cypress.Commands.add('emailCompilation', () => {
+  cy.get('.tbBtn.GCSDBRWBLDC.GCSDBRWBO.GCSDBRWBHV.mainTbBtn.GCSDBRWBGV',{ timeout: 5000 }).should('have.text','New').click()
+  cy.get('#mailTo').type('a.suhovey@mailfence.com{enter}')
+  cy.get('#mailSubject').type('testtesttestset')
+  cy.get('a.GCSDBRWBJSB.GCSDBRWBKSB').first().click()
+  cy.get('span.GCSDBRWBGR:contains("From document tool")').click()
+  cy.get('.checkIcon').click()
+  cy.get('.btn.GCSDBRWBO.defaultBtn').click()
+
+  // const docTitle = cy.get('div.GCSDBRWBAKB',{ timeout: 5000 }).invoke('attr', 'title')
+  // cy.log(docTitle)
+
+})
+
+Cypress.Commands.add('pressSendButton', () => {
+  cy.get('#mailSend > .btnCtn',{timeout: 5000}).should('have.text','Send').should('be.visible').click()
+})
+
+Cypress.Commands.add('findTheLetterAndOpenIt', () => {
+  cy.wait(10000)
+  cy.get('.GCSDBRWBO.tbBtn.afterSep.GCSDBRWBGV[title="Refresh"]').should('be.visible').click()
+  cy.get('.listSubject[title="testtesttestset"]').should('be.visible').click()
+})
+
+Cypress.Commands.add('findReceivedDocumentAndSaveItToFiles', () => {
+  cy.get('.GCSDBRWBKRB.GCSDBRWBO[title="New Text Document.txt (1 KB)"]').rightclick()
+  cy.get('span.GCSDBRWBGR:contains("Save in Documents")').click()
+  cy.get('.treeItemLabel:contains(My documents)').should('be.visible').click()
+  cy.wait(1000)
+  cy.get('.btnCtn:contains(Save)').should('be.visible').click()
+
+})
+
+Cypress.Commands.add('dragDocToTrash', () => {
+  // Переменные для элемента, который будет перетаскиваться
+  let startX, startY;
+  // Переменные для дестенейшена
+  let dropX, dropY;
+
+  // Получаем начальные координаты элемента, который будет перетаскиваться
+  cy.get('.GCSDBRWBDKB > .GCSDBRWBGT').invoke('offset').then((offset) => {
+    startX = offset.left;
+    startY = offset.top;
+    cy.log(`Позиция старта элемента x: ${startX}, Позиция старта элемента y: ${startY}`);
+
+    // Получаем координаты дестенейшена
+    cy.get('#doc_tree_trash').invoke('offset').then((offset) => {
+      dropX = offset.left;
+      dropY = offset.top;
+      cy.log(`Позиция дестенейшен x: ${dropX}, Позиция дестенейшен y: ${dropY}`);
+    }).then(() => {
+      // Используем начальные и дестенейшен координаты в операции "drag and drop"
+      cy.wait(2000)
+      cy.get('.GCSDBRWBDKB > .GCSDBRWBGT')
+      .trigger('mousedown', { which: 1, pageX: startX, pageY: startY })
+  .trigger('mousemove', { which: 1, pageX: dropX, pageY: dropY })
+  .trigger('mouseup')
+    });
+  });
+});
+
+
+// Находим элемент, на который вы хотите перетащить первый элемент
+ 
+
+
+
+
+Cypress.Commands.add('generateAttachment', (filePath, attachmentName, attachmentExtension, attachmentText)=> {
   cy.writeFile(`${filePath}\\${attachmentName}.${attachmentExtension}`, `${attachmentText}`);
   cy.readFile(`${filePath}\\${attachmentName}.${attachmentExtension}`).should("not.be.null");
 })
+
+// Cypress.Commands.add('generateAttachment', (filePath, attachmentName, attachmentExtension, attachmentText)=> {
+//     cy.readFile(`${filePath}\\${attachmentName}.${attachmentExtension}`).should("not.be.null");
+//     cy.deleteFile()
+// })
 
 Cypress.Commands.add("uploadNewDocumentOnEmailPage", (path, id) => {
   cy.fixture('fileAttachment.json').then((testData) => {
@@ -107,13 +182,18 @@ Cypress.Commands.add("uploadNewDocumentOnEmailPage", (path, id) => {
   });
 });
 
+Cypress.Commands.add("openDocPage", () => {
+  cy.get('.icon24-Documents.toolImg').click()
+  cy.get('.GCSDBRWBDX.treeItemRoot.GCSDBRWBLX.nodeSel').click()
+})
+
 Cypress.Commands.add("uploadNewDocumentOnDocumentPage", (path, url) => {
   url = `/sw?type=doc&state=26&gwt=1&oidDir=465459611`;
   cy.intercept(url).as(`uploadDocument`);
   cy.get("#new_doc input[type=file]", {timeout: 10000}).selectFile(path, { action: "select", force: true });
   cy.wait(`@uploadDocument`);
 
-  
+
 })
 
 Cypress.Commands.add("clearInboxEmails", () => {
@@ -127,17 +207,17 @@ Cypress.Commands.add("clearDocuments", () => {
   cy.get('.icon24-Documents.toolImg').click()
   cy.get('.GCSDBRWBDX.treeItemRoot.GCSDBRWBLX.nodeSel').click()
   cy.checkIfAnyExistElementsInDocuments()
-  
+
 })
 
 Cypress.Commands.add("clearEnvironment", () => {
   cy.visit('https://mailfence.com/')
   cy.login()
-  
+
   cy.clearInboxEmails()
   cy.clearDocuments()
-  
-  
+
+
 
 
 })
@@ -146,10 +226,10 @@ Cypress.Commands.add("clearEnvironment", () => {
 Cypress.Commands.add("checkIfAnyExistElementsInEmail", () => {
   cy.wait(3500)
   cy.get('.icon.icon-checkb').click()
-  
+
   const buttons=new ButtonsOfTheInboxEmail()
     cy.wait(5000)
-    
+
     buttons.getButtons().then((buttones) => {
       const countOfElementsInButtons = buttones.find('.GCSDBRWBO.tbBtn.afterSep.GCSDBRWBFV.tbBtnDisabled[title="To Trash"]').length;
 
@@ -166,11 +246,11 @@ Cypress.Commands.add("checkIfAnyExistElementsInEmail", () => {
 Cypress.Commands.add("checkIfAnyExistElementsInDocuments", () => {
   cy.wait(3500)
   cy.get('.icon.icon-checkb').click()
-  
+
   const buttons = new ButtonsOfTheDocuments()
 
     cy.wait(5000)
-    
+
     buttons.getListOfDocElements().then(($frt) => {
       const countOfElementsInButtons = $frt.find('.GCSDBRWBO.tbBtn.afterSep.GCSDBRWBFV.tbBtnDisabled[title="To Trash"]').length;
       cy.wait(5000)
@@ -181,13 +261,16 @@ Cypress.Commands.add("checkIfAnyExistElementsInDocuments", () => {
           //const name = cy.get('.GCSDBRWBBU.GCSDBRWBDU.trow').should('have.text',"")
           cy.get('.GCSDBRWBO.tbBtn.afterSep.GCSDBRWBGV[title="To Trash"]').click().then(() => {
             const list = new AllItemsInDocumentList()
-            list.getListItems().then(($listItems)=>{
-              const elementsList = $listItems.find('.GCSDBRWBBU').length
+            const listItemm = new ItemsInTheDocList()
+            const pageBody=new PageBody()
+            const listItemElement = listItemm.getListItemElement()
+            pageBody.getPageBody().then((body) => {
+            const countOfElementsInBody = body.find(listItemElement).length;
 
-              if (elementsList > 0){
+              if (countOfElementsInBody > 0){
                 cy.log("Attachments are not deleted!")
               } else {
-                cy.log("Attachments are deleted successfully")
+                cy.log("Attachments are deleted successfully Or Not detected")
               }
             })
           })

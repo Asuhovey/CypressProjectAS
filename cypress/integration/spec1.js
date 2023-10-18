@@ -12,8 +12,17 @@ describe('Test Spec', () => {
         cy.generateAttachment(this.data.filePath, this.data.attachmentName, this.data.attachmentExtension, this.data.attachmentText);
      })
 
-      //cy.login()
-      cy.clearEnvironment()
+      cy.login()
+      //cy.emailCompilation()
+      //cy.pressSendButton()
+      //cy.findTheLetterAndOpenIt()
+      //cy.findReceivedDocumentAndSaveItToFiles()
+      cy.openDocPage()
+      cy.dragDocToTrash()
+
+      cy.wait(5000)
+      //cy.clearEnvironment()
+      //cy.uploadNewDocumentOnEmailPage()
       //cy.checkIfOnMailTab()
   
 //       cy.wait(2000)

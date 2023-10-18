@@ -1,9 +1,11 @@
 // AllItemsInDocumentList.js
 class AllItemsInDocumentList {
-    getListItems() {
-      return cy.get('.docType.icon-Type-text'); // Пример селектора
+    getList() {
+      return cy.get('.GCSDBRWBPT.GCSDBRWBLCC.GCSDBRWBO'); // Пример селектора
     }
   }
   
   export default AllItemsInDocumentList;
+  
+
   
