@@ -1,5 +1,11 @@
 describe('Test Spec', () => {
+
+  
+before(() => {
+  cy.clearEnvironment()
+})
     it('Should login and send email to itself and something else...', () => {
+      
       cy.visit('https://mailfence.com/')
       
 
@@ -13,16 +19,32 @@ describe('Test Spec', () => {
      })
 
       cy.login()
-      //cy.emailCompilation()
-      //cy.pressSendButton()
-      //cy.findTheLetterAndOpenIt()
-      //cy.findReceivedDocumentAndSaveItToFiles()
+    })
+    it('Should open Documents page and upload the attachment via request', () => {
       cy.openDocPage()
+      cy.uploadNewDocumentOnEmailPage()
+
+    })
+    it('Should open the Email page , compose the new email and send it', () => {
+      cy.checkIfOnMailTab()
+      cy.emailCompilation()
+      cy.pressSendButton()
+
+    })
+    it('Should find new Letter in the Inbox tab and Open it', () => {
+      cy.findTheLetterAndOpenIt()
+
+    })
+    it('Should Find received document and save it into the Document tab/list', () => {
+      cy.findReceivedDocumentAndSaveItToFiles()
+
+    })
+    it('Should open Docuemtn list and clear it via drag n drop to trash', () => {
       cy.dragDocToTrash()
 
       cy.wait(5000)
-      //cy.clearEnvironment()
-      //cy.uploadNewDocumentOnEmailPage()
+  
+      
       //cy.checkIfOnMailTab()
   
 //       cy.wait(2000)

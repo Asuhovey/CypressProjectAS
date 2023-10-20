@@ -44,8 +44,8 @@ import PageBody from '../page-objects/PageBody';
 
     const loginPage=new LoginPage()
     loginPage.getLogInButton().click()
-    cy.get('#UserID').type(Cypress.env('username'));
-    cy.get('#Password').type(Cypress.env('password'));
+    cy.get('#UserID',{timeout:10000}).should('be.visible').type(Cypress.env('username'));
+    cy.get('#Password',{timeout:10000}).should('be.visible').type(Cypress.env('password'));
     cy.get('.btn').click().then(()=>{
       cy.get('.icon24-Message', {timeout: 10000}).should('be.visible')
     })
@@ -123,10 +123,14 @@ Cypress.Commands.add('dragDocToTrash', () => {
     }).then(() => {
       // Используем начальные и дестенейшен координаты в операции "drag and drop"
       cy.wait(2000)
-      cy.get('.GCSDBRWBDKB > .GCSDBRWBGT')
-      .trigger('mousedown', { which: 1, pageX: startX, pageY: startY })
-  .trigger('mousemove', { which: 1, pageX: dropX, pageY: dropY })
-  .trigger('mouseup')
+      cy.get('.GCSDBRWBDKB > .GCSDBRWBGT').then((subject)=>{
+        cy.wrap(subject).trigger('mousedown', { which: 1, pageX: 222, pageY: 92,force: true })
+        .trigger('mousemove', { which: 1, pageX: 27, pageY: 86,force: true })
+        
+
+      cy.get('#doc_tree_trash').trigger('mouseup')
+    })
+      
     });
   });
 });
@@ -184,7 +188,7 @@ Cypress.Commands.add("uploadNewDocumentOnEmailPage", (path, id) => {
 
 Cypress.Commands.add("openDocPage", () => {
   cy.get('.icon24-Documents.toolImg').click()
-  cy.get('.GCSDBRWBDX.treeItemRoot.GCSDBRWBLX.nodeSel').click()
+  cy.get('.GCSDBRWBDX.treeItemRoot.GCSDBRWBLX.nodeSel',{timeout: 10000}).should('be.visible').click()
 })
 
 Cypress.Commands.add("uploadNewDocumentOnDocumentPage", (path, url) => {
@@ -198,14 +202,14 @@ Cypress.Commands.add("uploadNewDocumentOnDocumentPage", (path, url) => {
 
 Cypress.Commands.add("clearInboxEmails", () => {
   cy.get('.icon24-Message').click()
-  cy.get('.treeItemLabel#treeInbox').click()
+  cy.get('.treeItemLabel#treeInbox',{timeout:10000}).should('be.visible').click()
   cy.checkIfAnyExistElementsInEmail('.icon.icon-checkb')
 })
 
 
 Cypress.Commands.add("clearDocuments", () => {
   cy.get('.icon24-Documents.toolImg').click()
-  cy.get('.GCSDBRWBDX.treeItemRoot.GCSDBRWBLX.nodeSel').click()
+  cy.get('.GCSDBRWBDX.treeItemRoot.GCSDBRWBLX.nodeSel',{timeout:10000}).should('be.visible').click()
   cy.checkIfAnyExistElementsInDocuments()
 
 })
@@ -217,6 +221,8 @@ Cypress.Commands.add("clearEnvironment", () => {
   cy.clearInboxEmails()
   cy.clearDocuments()
 
+  cy.logout()
+
 
 
 
@@ -224,16 +230,15 @@ Cypress.Commands.add("clearEnvironment", () => {
 
 
 Cypress.Commands.add("checkIfAnyExistElementsInEmail", () => {
-  cy.wait(3500)
-  cy.get('.icon.icon-checkb').click()
+  cy.log("hyi")
+  cy.get('.icon.icon-checkb', { timeout: 10000 }).should('be.visible').click();
+
 
   const buttons=new ButtonsOfTheInboxEmail()
-    cy.wait(5000)
+    
 
     buttons.getButtons().then((buttones) => {
-      const countOfElementsInButtons = buttones.find('.GCSDBRWBO.tbBtn.afterSep.GCSDBRWBFV.tbBtnDisabled[title="To Trash"]').length;
-
-      cy.wait(5000)
+      const countOfElementsInButtons = buttones.find('.GCSDBRWBO.tbBtn.afterSep.GCSDBRWBFV.tbBtnDisabled[title="To Trash"]',{timeout:10000}).length;
 
       if (countOfElementsInButtons > 0) {
           cy.log('Email Inbox tab is empty')}
@@ -244,16 +249,14 @@ Cypress.Commands.add("checkIfAnyExistElementsInEmail", () => {
 })
 
 Cypress.Commands.add("checkIfAnyExistElementsInDocuments", () => {
-  cy.wait(3500)
-  cy.get('.icon.icon-checkb').click()
+   cy.get('.icon.icon-checkb',{timeout:10000}).click()
 
   const buttons = new ButtonsOfTheDocuments()
 
-    cy.wait(5000)
+    
 
     buttons.getListOfDocElements().then(($frt) => {
-      const countOfElementsInButtons = $frt.find('.GCSDBRWBO.tbBtn.afterSep.GCSDBRWBFV.tbBtnDisabled[title="To Trash"]').length;
-      cy.wait(5000)
+      const countOfElementsInButtons = $frt.find('.GCSDBRWBO.tbBtn.afterSep.GCSDBRWBFV.tbBtnDisabled[title="To Trash"]',{timeout:10000}).length;
 
       if (countOfElementsInButtons > 0) {
         cy.log('Attachments are not occured')}
@@ -276,4 +279,10 @@ Cypress.Commands.add("checkIfAnyExistElementsInDocuments", () => {
           })
 }
 })
+})
+
+Cypress.Commands.add("logout", () => {
+  cy.get('.GCSDBRWBNE').click()
+  cy.get('.GCSDBRWBPQ:contains("Log out")').click()
+
 })
