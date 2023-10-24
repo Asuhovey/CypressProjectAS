@@ -49,7 +49,8 @@ import PageBody from '../page-objects/PageBody';
     cy.get('.btn').click().then(()=>{
       cy.get('.icon24-Message', {timeout: 10000}).should('be.visible')
     })
-  });
+  })
+
 // Command#2 of checking if the test on the email tab (need to rework with some POMs and removing the WAITs)
   Cypress.Commands.add('checkIfOnMailTab', () => {
 
@@ -67,9 +68,9 @@ import PageBody from '../page-objects/PageBody';
         cy.log('NOTFOUND')
       }
   });
-
 })
 
+// Command#3 Composint the email
 Cypress.Commands.add('emailCompilation', () => {
   cy.get('.tbBtn.GCSDBRWBLDC.GCSDBRWBO.GCSDBRWBHV.mainTbBtn.GCSDBRWBGV',{ timeout: 5000 }).should('have.text','New').click()
   cy.get('#mailTo').type('a.suhovey@mailfence.com{enter}')
@@ -79,21 +80,20 @@ Cypress.Commands.add('emailCompilation', () => {
   cy.get('.checkIcon').click()
   cy.get('.btn.GCSDBRWBO.defaultBtn').click()
 
-  // const docTitle = cy.get('div.GCSDBRWBAKB',{ timeout: 5000 }).invoke('attr', 'title')
-  // cy.log(docTitle)
-
 })
-
+// Command#4 Pressing 'Send' button for the composed email
 Cypress.Commands.add('pressSendButton', () => {
   cy.get('#mailSend > .btnCtn',{timeout: 5000}).should('have.text','Send').should('be.visible').click()
 })
 
+// Command#5 Searching received email after timeout 
 Cypress.Commands.add('findTheLetterAndOpenIt', () => {
   cy.wait(10000)
   cy.get('.GCSDBRWBO.tbBtn.afterSep.GCSDBRWBGV[title="Refresh"]').should('be.visible').click()
   cy.get('.listSubject[title="testtesttestset"]').should('be.visible').click()
 })
 
+// Command#6 Find attached document and save it in the document tab
 Cypress.Commands.add('findReceivedDocumentAndSaveItToFiles', () => {
   cy.get('.GCSDBRWBKRB.GCSDBRWBO[title="New Text Document.txt (1 KB)"]').rightclick()
   cy.get('span.GCSDBRWBGR:contains("Save in Documents")').click()
@@ -103,6 +103,7 @@ Cypress.Commands.add('findReceivedDocumentAndSaveItToFiles', () => {
 
 })
 
+// Command#7 Drag&Drop command
 Cypress.Commands.add('dragDocToTrash', () => {
   // Переменные для элемента, который будет перетаскиваться
   let startX, startY;
@@ -131,27 +132,17 @@ Cypress.Commands.add('dragDocToTrash', () => {
       cy.get('#doc_tree_trash').trigger('mouseup')
     })
       
-    });
-  });
-});
-
-
-// Находим элемент, на который вы хотите перетащить первый элемент
+    })
+  })
+})
  
-
-
-
-
+// Command#8 Generate attachment and create it in the directory
 Cypress.Commands.add('generateAttachment', (filePath, attachmentName, attachmentExtension, attachmentText)=> {
   cy.writeFile(`${filePath}\\${attachmentName}.${attachmentExtension}`, `${attachmentText}`);
   cy.readFile(`${filePath}\\${attachmentName}.${attachmentExtension}`).should("not.be.null");
 })
 
-// Cypress.Commands.add('generateAttachment', (filePath, attachmentName, attachmentExtension, attachmentText)=> {
-//     cy.readFile(`${filePath}\\${attachmentName}.${attachmentExtension}`).should("not.be.null");
-//     cy.deleteFile()
-// })
-
+// Command#9 Upload document on the document page
 Cypress.Commands.add("uploadNewDocumentOnEmailPage", (path, id) => {
   cy.fixture('fileAttachment.json').then((testData) => {
     const filePath = testData.filePath;
@@ -181,32 +172,34 @@ Cypress.Commands.add("uploadNewDocumentOnEmailPage", (path, id) => {
         // Проверки на ответ
         expect(response.status).to.eq(200); // Проверьте статус HTTP-запроса
         // Добавьте другие проверки по необходимости
-      });
-    });
-  });
-});
+      })
+    })
+  })
+})
 
+// Command#10 Open document page
 Cypress.Commands.add("openDocPage", () => {
   cy.get('.icon24-Documents.toolImg').click()
   cy.get('.GCSDBRWBDX.treeItemRoot.GCSDBRWBLX.nodeSel',{timeout: 10000}).should('be.visible').click()
 })
 
+// Command#11 Upload document via UI and request on document page
 Cypress.Commands.add("uploadNewDocumentOnDocumentPage", (path, url) => {
   url = `/sw?type=doc&state=26&gwt=1&oidDir=465459611`;
   cy.intercept(url).as(`uploadDocument`);
   cy.get("#new_doc input[type=file]", {timeout: 10000}).selectFile(path, { action: "select", force: true });
   cy.wait(`@uploadDocument`);
 
-
 })
 
+// Command#12 Clear all email in the email page for Inbox tab
 Cypress.Commands.add("clearInboxEmails", () => {
   cy.get('.icon24-Message').click()
   cy.get('.treeItemLabel#treeInbox',{timeout:10000}).should('be.visible').click()
   cy.checkIfAnyExistElementsInEmail('.icon.icon-checkb')
 })
 
-
+// Command#13 Clear all files in the document page
 Cypress.Commands.add("clearDocuments", () => {
   cy.get('.icon24-Documents.toolImg').click()
   cy.get('.GCSDBRWBDX.treeItemRoot.GCSDBRWBLX.nodeSel',{timeout:10000}).should('be.visible').click()
@@ -214,6 +207,7 @@ Cypress.Commands.add("clearDocuments", () => {
 
 })
 
+// Command#14 Clear the environment from ALL email in the INBOX and from ALL files in the documents
 Cypress.Commands.add("clearEnvironment", () => {
   cy.visit('https://mailfence.com/')
   cy.login()
@@ -223,12 +217,9 @@ Cypress.Commands.add("clearEnvironment", () => {
 
   cy.logout()
 
-
-
-
 })
 
-
+// Command#14 Check if any mails are exist in the inbox tab for Email page
 Cypress.Commands.add("checkIfAnyExistElementsInEmail", () => {
   cy.log("hyi")
   cy.get('.icon.icon-checkb', { timeout: 10000 }).should('be.visible').click();
@@ -248,6 +239,7 @@ Cypress.Commands.add("checkIfAnyExistElementsInEmail", () => {
 })
 })
 
+// Command#15 Check if any files are uploaded in documents tab
 Cypress.Commands.add("checkIfAnyExistElementsInDocuments", () => {
    cy.get('.icon.icon-checkb',{timeout:10000}).click()
 
@@ -281,6 +273,7 @@ Cypress.Commands.add("checkIfAnyExistElementsInDocuments", () => {
 })
 })
 
+// Command#16 Logout out from application 
 Cypress.Commands.add("logout", () => {
   cy.get('.GCSDBRWBNE').click()
   cy.get('.GCSDBRWBPQ:contains("Log out")').click()
