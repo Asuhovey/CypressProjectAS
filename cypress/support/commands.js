@@ -1,42 +1,8 @@
-// ***********************************************
-// This example commands.js shows you how to
-// create various custom commands and overwrite
-// existing commands.
-//
-// For more comprehensive examples of custom
-// commands please read more here:
-// https://on.cypress.io/custom-commands
-// ***********************************************
-//
-//
-// -- This is a parent command --
-// Cypress.Commands.add('login', (email, password) => { ... })
-//
-//
-// -- This is a child command --
-// Cypress.Commands.add('drag', { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add('dismiss', { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This will overwrite an existing command --
-// Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
-
-// Cypress.Commands.add('login', () => {
-
-//     // Используйте переменные окружения из файла .env
-//     cy.get('#UserID').type(Cypress.env('username'));
-//     cy.get('#Password').type(Cypress.env('password'));
-
-//     cy.get('form').submit();
-//   });
 import ItemsInTheDocList from '../page-objects/ItemsInTheDocList';
 import AllItemsInDocumentList from '../page-objects/AllItemsInDocumentList';
 import ButtonsOfTheDocuments from '../page-objects/ButtonsOfTheDocuments';
 import ButtonsOfTheInboxEmail from '../page-objects/ButtonsOfTheInboxEmail';
-import LoginPage from '../page-objects/LoginPage';
+import LoginPage from '../page-objects/startPage/LoginPage';
 import PageBody from '../page-objects/PageBody';
 
 // Command#1 of identifing the fields and logining
@@ -77,7 +43,7 @@ Cypress.Commands.add('emailCompilation', () => {
   cy.get('#mailSubject').type('testtesttestset')
   cy.get('a.GCSDBRWBJSB.GCSDBRWBKSB').first().click()
   cy.get('span.GCSDBRWBGR:contains("From document tool")').click()
-  cy.get('.checkIcon').click()
+  cy.get('.checkIcon',{ timeout: 5000 }).click()
   cy.get('.btn.GCSDBRWBO.defaultBtn').click()
 
 })
@@ -94,8 +60,8 @@ Cypress.Commands.add('findTheLetterAndOpenIt', () => {
 })
 
 // Command#6 Find attached document and save it in the document tab
-Cypress.Commands.add('findReceivedDocumentAndSaveItToFiles', () => {
-  cy.get('.GCSDBRWBKRB.GCSDBRWBO[title="New Text Document.txt (1 KB)"]').rightclick()
+Cypress.Commands.add('findReceivedDocumentAndSaveItToFiles', (title) => {
+  cy.get('.GCSDBRWBKRB.GCSDBRWBO[title*="' + title + '"]').should('be.visible').rightclick()
   cy.get('span.GCSDBRWBGR:contains("Save in Documents")').click()
   cy.get('.treeItemLabel:contains(My documents)').should('be.visible').click()
   cy.wait(1000)
@@ -187,6 +153,7 @@ Cypress.Commands.add("openDocPage", () => {
 Cypress.Commands.add("uploadNewDocumentOnDocumentPage", (path, url) => {
   url = `/sw?type=doc&state=26&gwt=1&oidDir=465459611`;
   cy.intercept(url).as(`uploadDocument`);
+  cy.log("YEAHBOOOOODY"+"     "+path)
   cy.get("#new_doc input[type=file]", {timeout: 10000}).selectFile(path, { action: "select", force: true });
   cy.wait(`@uploadDocument`);
 
