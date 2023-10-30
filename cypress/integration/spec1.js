@@ -1,3 +1,8 @@
+import LohinPage from '../page-objects/LohinPage';
+import EmailPage from '../page-objects/EmailPage';
+import DocPage from '../page-objects/DocPage';
+import MainPage from '../page-objects/MainPage';
+
 describe('Test Spec', () => {
 
   
@@ -6,7 +11,7 @@ beforeEach(() => {
     
     
 
-    cy.log("ENDNEDNEDNDENEDNDENDENDENDENDENDEDEN")
+    cy.log("Environment is cleared")
 
     
     })
@@ -20,27 +25,32 @@ beforeEach(() => {
       
       cy.visit('https://mailfence.com/')
       
-      cy.login()
+      LohinPage.login((Cypress.env('username')), (Cypress.env('password')))
 
       
     
-    
-      cy.openDocPage()
+  
+      MainPage.clickOnDocTab()
+      DocPage.openDocPage()
       cy.uploadNewDocumentOnDocumentPage(`${filePath}\\${attachmentName}.${attachmentExtension}`)
 
     
     
       cy.checkIfOnMailTab()
-      cy.emailCompilation()
-      cy.pressSendButton()
+        const a = 'a.suhovey@mailfence.com{enter}'
+        const b = 'testtesttestset'
+        EmailPage.clickOnNewEmailButton()
+        EmailPage.emailCompilation(a , b) 
+          
+        EmailPage.pressSendButton()
 
     
     
-      cy.findTheLetterAndOpenIt()
+      EmailPage.findTheLetterAndOpenIt(b)
 
     
     
-      cy.findReceivedDocumentAndSaveItToFiles(`${attachmentName}.${attachmentExtension}`)
+      EmailPage.findReceivedDocumentAndSaveItToFiles(`${attachmentName}.${attachmentExtension}`)
 
     
     
