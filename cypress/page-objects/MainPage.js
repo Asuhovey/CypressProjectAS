@@ -13,7 +13,7 @@ class MainPage {
     }
 
     clickOnDocTab() {
-        cy.get('.icon24-Documents.toolImg').click()
+        cy.get('.icon24-Documents.toolImg',{timeout:10000}).should('be.visible').click()
     }
 
     getProfileIcon() {

@@ -90,7 +90,7 @@ clickOnAnEmailByTitle(title) {
 }
 
 getAnAnyListSubjectFromInbox() {
-    cy.get('.listSubject')
+    return '.listSubject'
 }
 
 clickOnAnAnyListSubjectFromInbox() {
@@ -115,6 +115,10 @@ clickOnMainCheckboxAtInboxPage() {
 
 getDISABLEDTrashCanIcon() {
     cy.get('.GCSDBRWBO.tbBtn.afterSep.GCSDBRWBFV.tbBtnDisabled[title="To Trash"]',{timeout:10000})
+}
+
+getDISABLEDTrashCanIconElement() {
+    return '.GCSDBRWBO.tbBtn.afterSep.GCSDBRWBFV.tbBtnDisabled[title="To Trash"]'
 }
 
 clickOnDISABLEDTrashCanIon() {
@@ -144,6 +148,10 @@ clickOnMydocsWHTD() {
 clickAndSaveAttachmentFromLetter() {
     cy.get('.btnCtn:contains(Save)').should('be.visible').click()
 }
+
+getButtons() {
+    return cy.get('div.GCSDBRWBMQC')
+  }
 
 emailCompilation(to , subject) {
     //this.clickOnNewEmailButton();
