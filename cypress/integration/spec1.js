@@ -1,4 +1,4 @@
-import LohinPage from '../page-objects/LohinPage';
+import LohinPage from '../page-objects/LoginPage';
 import EmailPage from '../page-objects/EmailPage';
 import DocPage from '../page-objects/DocPage';
 import MainPage from '../page-objects/MainPage';
@@ -7,21 +7,23 @@ import PageBody from '../page-objects/PageBody';
 
 describe('Test Spec', () => {
 
-  
-beforeEach(() => {
 
-  cy.log("Start environment clearing")
-  cy.clearEnvironment()
-  
-    })
-    it('Should do things', () => {
-      cy.fixture('fileAttachment').then(function(data) {
+  beforeEach(() => {
+
+    cy.log("Start environment clearing")
+    cy.clearEnvironment()
+
+  })
+  it('Should do things', () => {
+    cy.fixture('fileAttachment').then(function (data) {
       this.data = data;
       const filePath = this.data.filePath;
       const attachmentName = this.data.attachmentName;
       const attachmentExtension = this.data.attachmentExtension;
       cy.generateAttachment(this.data.filePath, this.data.attachmentName, this.data.attachmentExtension, this.data.attachmentText);
-      
+      const email = `a.suhovey@mailfence.com`
+      const name = 'testtesttestset'
+
       cy.log('Step 1')
       LohinPage.login((Cypress.env('username')), (Cypress.env('password')))
 
@@ -34,21 +36,21 @@ beforeEach(() => {
 
       cy.log('Step 4')
       cy.checkIfOnMailTab()
-        EmailPage.clickOnNewEmailButton()
-        EmailPage.emailCompilation('a.suhovey@mailfence.com{enter}' , 'testtesttestset') 
-        EmailPage.pressSendButton()
+      EmailPage.clickOnNewEmailButton()
+      EmailPage.emailCompilation(email, name)
+      EmailPage.pressSendButton()
 
       cy.log('Step 5')
-      EmailPage.findTheLetterAndOpenIt('testtesttestset')
+      EmailPage.findTheLetterAndOpenIt(name)
       EmailPage.findReceivedDocumentAndSaveItToFiles(`${attachmentName}.${attachmentExtension}`)
 
       cy.log('Step 6')
       MainPage.clickOnDocTab()
-      cy.orDrop(DocPage.getUploadedDocFile() , DocPage.getTreeTrashArea())
+      cy.orDrop(DocPage.getUploadedDocFile(), DocPage.getTreeTrashArea())
       cy.reload().then(() => {
-      cy.checkIfNeededFileDragged(DocPage.getUploadedDocFile())
+        cy.checkIfNeededFileDragged(DocPage.getUploadedDocFile())
       })
-      cy.log('Test is executed successfully!')
+      cy.log('Test has been executed successfully!')
+    })
   })
-})
 })

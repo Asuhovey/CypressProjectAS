@@ -1,61 +1,95 @@
 class DocPage {
 
     getMyDocTreeitem() {
-        cy.get('.GCSDBRWBDX.treeItemRoot.GCSDBRWBLX.nodeSel',{timeout: 10000}).should('be.visible')
+        return cy.get('.GCSDBRWBDX.treeItemRoot.GCSDBRWBLX.nodeSel',{timeout: 10000}).should('be.visible')
     }
 
     clickMyDocTreeitem() {
-        cy.get('.GCSDBRWBDX.treeItemRoot.GCSDBRWBLX.nodeSel',{timeout: 10000}).should('be.visible').click()
+        this.getMyDocTreeitem().click()
+    }
+    
+    getListItems() {
+      return cy.get('.GCSDBRWBBU')
+    }
+    
+    getListItemElement() {
+      return document.querySelector('.GCSDBRWBBU')
+    }
+    
+    getList() {
+      return cy.get('.GCSDBRWBPT.GCSDBRWBLCC.GCSDBRWBO')
     }
 
-    getListItems() {
-        return cy.get('.GCSDBRWBBU')
-      }
-      getListItemElement() {
-        return document.querySelector('.GCSDBRWBBU')
-      }
-
-      getList() {
-        return cy.get('.GCSDBRWBPT.GCSDBRWBLCC.GCSDBRWBO')
-      }
-
-      getListOfDocElements() {
-        return cy.get('.GCSDBRWBO.GCSDBRWBAEC')
-      }
-
-      getDocInpput() {
-        return  cy.get("#new_doc input[type=file]", {timeout: 10000})
-      }
-
-      getDISABLEDTrashCanIconElement() {
-        return '.GCSDBRWBO.tbBtn.afterSep.GCSDBRWBFV.tbBtnDisabled[title="To Trash"]'
+    getListOfDocElements() {
+      return cy.get('.GCSDBRWBO.GCSDBRWBAEC')
+    }
+    
+    getDocInpput() {
+      return  cy.get("#new_doc input[type=file]", {timeout: 10000})
+    }
+    
+    getDisabledTrashCanIconElement() {
+      return '.GCSDBRWBO.tbBtn.afterSep.GCSDBRWBFV.tbBtnDisabled[title="To Trash"]'
+    }
+    
+    getEnabledTrashCanIconElement() {
+      return cy.get('.GCSDBRWBO.tbBtn.afterSep.GCSDBRWBGV[title="To Trash"]', {timeout: 10000})
     }
 
     clickEnabledTrashCanIconElement() {
-        return cy.get('.GCSDBRWBO.tbBtn.afterSep.GCSDBRWBGV[title="To Trash"]').click()
+      this.getEnabledTrashCanIconElement().click()
+    }
+    
+    getOnCheckboxInDocPage() {
+      return cy.get('.icon.icon-checkb',{timeout:10000})
     }
 
     clickOnCheckboxInDocPage() {
-        return cy.get('.icon.icon-checkb',{timeout:10000}).click()
+      this.getOnCheckboxInDocPage().click()
     }
 
-    getUploadedDocFile() {
-      return 'div.GCSDBRWBAKB:contains("TestAttachment1.txt")'
-    }
 
-    getSavedDocFile() {
-      return 'div.GCSDBRWBAKB:contains("TestAttachment1_1.txt")'
-    }
+    
+    getUploadedDocFileeee() {
+            cy.fixture('fileAttachment').then(function (data) {
+        this.data = data;
+        const filePath = this.data.filePath;
+        const attachmentName = this.data.attachmentName;
+        const attachmentExtension = this.data.attachmentExtension;
+  
+      // Возвращаем селектор с именем файла
+      return `div.GCSDBRWBAKB:contains("${attachmentName}.${attachmentExtension}")`;
+    })
+  }
+
+  getUploadedDocFile(attachmentName, attachmentExtension) {
+    cy.fixture('fileAttachment').then(function (data) {
+      this.data = data;
+      const filePath = this.data.filePath;
+      const attachmentName = this.data.attachmentName;
+      const attachmentExtension = this.data.attachmentExtension;
+    return `div.GCSDBRWBAKB:contains(${attachmentName}.${attachmentExtension})`;
+  })
+}
+  
+  getSavedDocFile(attachmentName, attachmentExtension) {
+    cy.fixture('fileAttachment').then(function (data) {
+      this.data = data;
+      const filePath = this.data.filePath;
+      const attachmentName = this.data.attachmentName;
+      const attachmentExtension = this.data.attachmentExtension;
+    return `div.GCSDBRWBAKB:contains(${attachmentName}_1.${attachmentExtension})`;
+  })
+}
 
     getTreeTrashArea() {
       return '#doc_tree_trash'
     }
     
     openDocPage()  {
-        this.getMyDocTreeitem()
-      }
-
-      
+      this.getMyDocTreeitem()
+    }     
 }
+
 
 export default new DocPage();

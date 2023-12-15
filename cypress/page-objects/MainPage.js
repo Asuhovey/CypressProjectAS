@@ -13,7 +13,7 @@ class MainPage {
     }
 
     clickOnDocTab() {
-        cy.get('.icon24-Documents.toolImg',{timeout:10000}).should('be.visible').click()
+        cy.get('.icon24-Documents.toolImg', { timeout: 10000 }).should('be.visible').click()
     }
 
     getProfileIcon() {
@@ -32,7 +32,7 @@ class MainPage {
         cy.get('.GCSDBRWBPQ:contains("Log out")').click()
     }
 
-    logout () {
+    logout() {
         this.clickOnProfileIcon()
         this.clickOnLogOutButton()
     }
