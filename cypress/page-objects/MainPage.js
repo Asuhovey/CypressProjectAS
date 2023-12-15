@@ -1,40 +1,24 @@
 class MainPage {
 
     getEmailTab() {
-        cy.get('.icon24-Message')
-    }
-
-    clickOnEmailTab() {
-        cy.get('.icon24-Message').click()
+        return cy.get('.icon24-Message')
     }
 
     getDocTab() {
-        cy.get('.icon24-Documents.toolImg')
-    }
-
-    clickOnDocTab() {
-        cy.get('.icon24-Documents.toolImg', { timeout: 10000 }).should('be.visible').click()
+        return cy.get('.icon24-Documents.toolImg', { timeout: 10000 }).should('be.visible')
     }
 
     getProfileIcon() {
-        cy.get('.GCSDBRWBNE')
-    }
-
-    clickOnProfileIcon() {
-        cy.get('.GCSDBRWBNE').click()
+        return cy.get('.GCSDBRWBNE')
     }
 
     getLogOutButton() {
-        cy.get('.GCSDBRWBPQ:contains("Log out")')
-    }
-
-    clickOnLogOutButton() {
-        cy.get('.GCSDBRWBPQ:contains("Log out")').click()
+        return cy.get('.GCSDBRWBPQ:contains("Log out")')
     }
 
     logout() {
-        this.clickOnProfileIcon()
-        this.clickOnLogOutButton()
+        this.getProfileIcon().click()
+        this.getLogOutButton().click()
     }
 }
 

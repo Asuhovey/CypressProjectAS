@@ -1,23 +1,11 @@
 class EmailPage {
 
     getNewEmailButton() {
-        cy.get('.tbBtn.GCSDBRWBLDC.GCSDBRWBO.GCSDBRWBHV.mainTbBtn.GCSDBRWBGV', { timeout: 5000 }).should('have.text', 'New')
-    }
-
-    clickOnNewEmailButton() {
-        cy.get('.tbBtn.GCSDBRWBLDC.GCSDBRWBO.GCSDBRWBHV.mainTbBtn.GCSDBRWBGV', { timeout: 5000 }).should('have.text', 'New').click()
+        return cy.get('.tbBtn.GCSDBRWBLDC.GCSDBRWBO.GCSDBRWBHV.mainTbBtn.GCSDBRWBGV', { timeout: 5000 }).should('have.text', 'New')
     }
 
     getToAddressTextField() {
-        cy.get('#mailTo')
-    }
-
-    typeToAddressTextField(a) {
-        cy.get('#mailTo').type(`${a}{enter}`)
-    }
-
-    clickToAddressTextField() {
-        cy.get('#mailTo').click()
+        return cy.get('#mailTo')
     }
 
     getSubjectTextField() {
@@ -28,88 +16,72 @@ class EmailPage {
         cy.get('#mailSubject').type(b)
     }
 
-    clickOnSubjectTextField() {
-        cy.get('#mailSubject').click()
-    }
-
     getAttachmentsButton() {
         cy.get('a.GCSDBRWBJSB.GCSDBRWBKSB')
     }
 
-    clickOnAttachmentsButton() {
-        cy.get('a.GCSDBRWBJSB.GCSDBRWBKSB').first().click()
+    getOnAttachmentsButton() {
+        return cy.get('a.GCSDBRWBJSB.GCSDBRWBKSB').first()
     }
 
     getButtonFromDocTool() {
         cy.get('span.GCSDBRWBGR:contains("From document tool")')
     }
 
-    clickOnButtonFromDocTool() {
-        cy.get('span.GCSDBRWBGR:contains("From document tool")').click()
+    getOnButtonFromDocTool() {
+        return cy.get('span.GCSDBRWBGR:contains("From document tool")')
     }
 
     getDocCheckbox() {
         cy.get('.checkIcon', { timeout: 5000 })
     }
 
-    clickOnDocCheckbox() {
-        cy.get('.checkIcon', { timeout: 5000 }).click()
+    getOnDocCheckbox() {
+        return cy.get('.checkIcon', { timeout: 5000 })
     }
 
     getSaveButton() {
         cy.get('.btn.GCSDBRWBO.defaultBtn')
     }
 
-    clickOnSaveButton() {
-        cy.get('.btn.GCSDBRWBO.defaultBtn').click()
+    getOnSaveButton() {
+        return cy.get('.btn.GCSDBRWBO.defaultBtn')
     }
 
     getSendButton() {
         cy.get('#mailSend > .btnCtn', { timeout: 5000 }).should('have.text', 'Send').should('be.visible')
     }
 
-    clickOnSendButton() {
-        cy.get('#mailSend > .btnCtn', { timeout: 5000 }).should('have.text', 'Send').should('be.visible').click()
+    getOnSendButton() {
+        return cy.get('#mailSend > .btnCtn', { timeout: 5000 }).should('have.text', 'Send').should('be.visible')
     }
 
     getRefreshButton() {
         cy.get('.GCSDBRWBO.tbBtn.afterSep.GCSDBRWBGV[title="Refresh"]').should('be.visible')
     }
 
-    clickOnRefreshButton() {
-        cy.get('.GCSDBRWBO.tbBtn.afterSep.GCSDBRWBGV[title="Refresh"]').should('be.visible').click()
+    getOnRefreshButton() {
+        return cy.get('.GCSDBRWBO.tbBtn.afterSep.GCSDBRWBGV[title="Refresh"]').should('be.visible')
     }
 
     getAnEmailByTitle(title) {
         cy.get(`.listSubject[title="${title}"]`).should('be.visible')
     }
 
-    clickOnAnEmailByTitle(title) {
-        cy.get(`.listSubject[title="${title}"]`).should('be.visible').click()
+    getOnAnEmailByTitle(title) {
+        return cy.get(`.listSubject[title="${title}"]`).should('be.visible')
     }
 
     getAnAnyListSubjectFromInbox() {
         return '.listSubject'
     }
 
-    clickOnAnAnyListSubjectFromInbox() {
-        cy.get('.listSubject').click()
-    }
-
     getAnInboxButtonInTheInbox() {
-        cy.get('.treeItemLabel#treeInbox', { timeout: 10000 }).should('be.visible')
-    }
-
-    clickOnAnInboxButtonInTheInbox() {
-        cy.get('.treeItemLabel#treeInbox', { timeout: 10000 }).should('be.visible').click()
+        return cy.get('.treeItemLabel#treeInbox', { timeout: 10000 }).should('be.visible')
     }
 
     getMainCheckboxAtInboxPage() {
-        cy.get('.icon.icon-checkb')
-    }
-
-    clickOnMainCheckboxAtInboxPage() {
-        cy.get('.icon.icon-checkb', { timeout: 10000 }).should('be.visible').click();
+        return cy.get('.icon.icon-checkb', { timeout: 10000 }).should('be.visible')
     }
 
     getDisabledTrashCanIcon() {
@@ -120,65 +92,61 @@ class EmailPage {
         return '.GCSDBRWBO.tbBtn.afterSep.GCSDBRWBFV.tbBtnDisabled[title="To Trash"]'
     }
 
-    clickOnDisabledTrashCanIon() {
-        cy.get('.GCSDBRWBO.tbBtn.afterSep.GCSDBRWBFV.tbBtnDisabled[title="To Trash"]').click()
-    }
-
     getEnabledTrashCanicon() {
-        cy.get('.GCSDBRWBO.tbBtn.afterSep.GCSDBRWBGV[title="To Trash"]')
+        return cy.get('.GCSDBRWBO.tbBtn.afterSep.GCSDBRWBGV[title="To Trash"]')
     }
 
-    clickOnEnabledTrashCanicon() {
-        cy.get('.GCSDBRWBO.tbBtn.afterSep.GCSDBRWBGV[title="To Trash"]').click()
+    getClickOnAttachedFile(titleOfAttachment) {
+        return cy.get('.GCSDBRWBKRB.GCSDBRWBO[title*="' + titleOfAttachment + '"]').should('be.visible')
     }
 
-    rightClickOnAttachedFile(titleOfAttachment) {
-        cy.get('.GCSDBRWBKRB.GCSDBRWBO[title*="' + titleOfAttachment + '"]').should('be.visible').rightclick()
+    getOnSaveInDocs() {
+        return cy.get('span.GCSDBRWBGR:contains("Save in Documents")')
     }
 
-    clickOnSaveInDocs() {
-        cy.get('span.GCSDBRWBGR:contains("Save in Documents")').click()
+    getOnMydocsWHTD() {
+        return cy.get('.treeItemLabel:contains(My documents)').should('be.visible')
     }
 
-    clickOnMydocsWHTD() {
-        cy.get('.treeItemLabel:contains(My documents)').should('be.visible').click()
-    }
-
-    clickAndSaveAttachmentFromLetter() {
-        cy.get('.btnCtn:contains(Save)').should('be.visible').click()
+    getAndSaveAttachmentFromLetter() {
+        return cy.get('.btnCtn:contains(Save)').should('be.visible')
     }
 
     getButtons() {
         return cy.get('div.GCSDBRWBMQC')
     }
 
+    typeToAddressTextField(a) {
+        this.getToAddressTextField().type(`${a}{enter}`)
+    }
+
+
     emailCompilation(to, subject) {
-        //this.clickOnNewEmailButton();
         this.typeToAddressTextField(to)
     
         this.typesubject(subject)
-        this.clickOnAttachmentsButton()
-        this.clickOnButtonFromDocTool()
-        this.clickOnDocCheckbox()
-        this.clickOnSaveButton()
+        this.getOnAttachmentsButton().click()
+        this.getOnButtonFromDocTool().click()
+        this.getOnDocCheckbox().click()
+        this.getOnSaveButton().click()
     }
 
     pressSendButton() {
-        this.clickOnSendButton()
+        this.getOnSendButton().click()
     }
 
     findTheLetterAndOpenIt(title) {
         cy.wait(10000)
-        this.clickOnRefreshButton()
-        this.clickOnAnEmailByTitle(title)
+        this.getOnRefreshButton().click()
+        this.getOnAnEmailByTitle(title).click()
     }
 
     findReceivedDocumentAndSaveItToFiles(titleOfAttachment) {
-        this.rightClickOnAttachedFile(titleOfAttachment)
-        this.clickOnSaveInDocs()
-        this.clickOnMydocsWHTD()
+        this.getClickOnAttachedFile(titleOfAttachment).rightclick()
+        this.getOnSaveInDocs().click()
+        this.getOnMydocsWHTD().click()
         cy.wait(1000)
-        this.clickAndSaveAttachmentFromLetter()
+        this.getAndSaveAttachmentFromLetter().click()
     }
 }
 

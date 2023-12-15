@@ -2,7 +2,6 @@ import LohinPage from '../page-objects/LoginPage';
 import EmailPage from '../page-objects/EmailPage';
 import DocPage from '../page-objects/DocPage';
 import MainPage from '../page-objects/MainPage';
-import PageBody from '../page-objects/PageBody';
 
 
 describe('Test Spec', () => {
@@ -28,7 +27,7 @@ describe('Test Spec', () => {
       LohinPage.login((Cypress.env('username')), (Cypress.env('password')))
 
       cy.log('Step 2')
-      MainPage.clickOnDocTab()
+      MainPage.getDocTab().click()
       DocPage.openDocPage()
 
       cy.log('Step 3')
@@ -36,7 +35,7 @@ describe('Test Spec', () => {
 
       cy.log('Step 4')
       cy.checkIfOnMailTab()
-      EmailPage.clickOnNewEmailButton()
+      EmailPage.getNewEmailButton().click()
       EmailPage.emailCompilation(email, name)
       EmailPage.pressSendButton()
 
@@ -45,7 +44,7 @@ describe('Test Spec', () => {
       EmailPage.findReceivedDocumentAndSaveItToFiles(`${attachmentName}.${attachmentExtension}`)
 
       cy.log('Step 6')
-      MainPage.clickOnDocTab()
+      MainPage.getDocTab().click()
       cy.orDrop(DocPage.getUploadedDocFile(), DocPage.getTreeTrashArea())
       cy.reload().then(() => {
         cy.checkIfNeededFileDragged(DocPage.getUploadedDocFile())

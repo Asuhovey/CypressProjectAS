@@ -4,7 +4,7 @@ class LohinPage {
     }
 
     openLogInForm() {
-        cy.get('#signin', { timeout: 10000 }).should('be.visible').click(); //Открыть поля для ввода логина и пароля
+        return cy.get('#signin', { timeout: 10000 }).should('be.visible'); //Открыть поля для ввода логина и пароля
     }
 
     fillUsername(username) {
@@ -23,7 +23,7 @@ class LohinPage {
 
     login(username, password) {
         this.visit();
-        this.openLogInForm();
+        this.openLogInForm().click();
         this.fillUsername(username);
         this.fillPassword(password);
         this.submitLogin();

@@ -3,17 +3,13 @@ class DocPage {
     getMyDocTreeitem() {
         return cy.get('.GCSDBRWBDX.treeItemRoot.GCSDBRWBLX.nodeSel',{timeout: 10000}).should('be.visible')
     }
-
-    clickMyDocTreeitem() {
-        this.getMyDocTreeitem().click()
-    }
     
     getListItems() {
-      return cy.get('.GCSDBRWBBU')
+      return cy.get('.GCSDBRWBKCC')
     }
     
     getListItemElement() {
-      return document.querySelector('.GCSDBRWBBU')
+      return document.querySelector('.GCSDBRWBKCC')
     }
     
     getList() {
@@ -35,17 +31,9 @@ class DocPage {
     getEnabledTrashCanIconElement() {
       return cy.get('.GCSDBRWBO.tbBtn.afterSep.GCSDBRWBGV[title="To Trash"]', {timeout: 10000})
     }
-
-    clickEnabledTrashCanIconElement() {
-      this.getEnabledTrashCanIconElement().click()
-    }
     
     getOnCheckboxInDocPage() {
       return cy.get('.icon.icon-checkb',{timeout:10000})
-    }
-
-    clickOnCheckboxInDocPage() {
-      this.getOnCheckboxInDocPage().click()
     }
 
 
@@ -90,6 +78,8 @@ class DocPage {
       this.getMyDocTreeitem()
     }     
 }
+
+
 
 
 export default new DocPage();

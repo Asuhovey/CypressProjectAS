@@ -8,17 +8,15 @@ Cypress.Commands.add('checkIfOnMailTab', () => {
 
   const pageBody = new PageBody()
 
-  cy.wait(5000)
 
   pageBody.getPageBody().then((body) => {
-    const countOfElementsInBody = body.find(EmailPage.getAnAnyListSubjectFromInbox()).length;
-    cy.wait(5000)
+    const countOfElementsInBody = body.find(EmailPage.getAnAnyListSubjectFromInbox(), { timeout: 10000 }).length;
     if (countOfElementsInBody > 0) {
       EmailPage.getNewEmailButton()
       cy.log('FOUND')
     }
     else {
-      MainPage.clickOnEmailTab()
+      MainPage.getEmailTab().click()
       cy.log('NOTFOUND')
     }
   });
@@ -82,14 +80,14 @@ Cypress.Commands.add("uploadNewDocumentOnDocumentPage", (path, url) => {
 })
 
 Cypress.Commands.add("clearInboxEmails", () => {
-  MainPage.clickOnEmailTab()
-  EmailPage.clickOnAnInboxButtonInTheInbox()
+  MainPage.getEmailTab().click()
+  EmailPage.getAnInboxButtonInTheInbox().click()
   cy.RemoveAllInboxEmails()
 })
 
 Cypress.Commands.add("clearDocuments", () => {
-  MainPage.clickOnDocTab()
-  DocPage.clickMyDocTreeitem()
+  MainPage.getDocTab().click()
+  DocPage.getMyDocTreeitem().click()
   cy.checkIfAnyExistElementsInDocuments()
 
 })
@@ -107,7 +105,7 @@ Cypress.Commands.add("clearEnvironment", () => {
 
 Cypress.Commands.add("RemoveAllInboxEmails", () => {
   cy.log("Clearing the Email tab")
-  EmailPage.clickOnMainCheckboxAtInboxPage()
+  EmailPage.getMainCheckboxAtInboxPage().click()
 
 
 
@@ -119,14 +117,14 @@ Cypress.Commands.add("RemoveAllInboxEmails", () => {
       cy.log('Email Inbox tab is empty')
     }
     else {
-      EmailPage.clickOnEnabledTrashCanicon()
+      EmailPage.getEnabledTrashCanicon().click()
     }
   })
 })
 
 Cypress.Commands.add("checkIfAnyExistElementsInDocuments", () => {
-  DocPage.clickOnCheckboxInDocPage()
-  DocPage.clickEnabledTrashCanIconElement()
+  DocPage.getOnCheckboxInDocPage().click()
+  DocPage.getEnabledTrashCanIconElement().click()
 
 
 
