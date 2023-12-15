@@ -45,7 +45,7 @@ describe('Test Spec', () => {
 
       cy.log('Step 6')
       MainPage.getDocTab().click()
-      cy.orDrop(DocPage.getUploadedDocFile(), DocPage.getTreeTrashArea())
+      cy.orDrop(DocPage.getUploadedDocFileNamepls(),1, DocPage.getTreeTrashArea())
       cy.reload().then(() => {
         cy.checkIfNeededFileDragged(DocPage.getUploadedDocFile())
       })

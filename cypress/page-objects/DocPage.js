@@ -36,6 +36,10 @@ class DocPage {
       return cy.get('.icon.icon-checkb',{timeout:10000})
     }
 
+    getUploadedDocFileNamepls() {
+      return `div.GCSDBRWBAKB:contains(TestAttachment1.txt)`;
+    }
+
 
     
     getUploadedDocFileeee() {
@@ -71,7 +75,7 @@ class DocPage {
 }
 
     getTreeTrashArea() {
-      return '#doc_tree_trash'
+      return cy.get('#doc_tree_trash', {timeout: 10000}).should('be.visible')
     }
     
     openDocPage()  {
