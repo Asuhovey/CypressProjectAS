@@ -1,3 +1,6 @@
+import MainPage from '../page-objects/MainPage';
+import PageBody from '../page-objects/PageBody';
+
 class EmailPage {
 
     getNewEmailButton() {
@@ -123,7 +126,7 @@ class EmailPage {
 
     emailCompilation(to, subject) {
         this.typeToAddressTextField(to)
-    
+
         this.typesubject(subject)
         this.getOnAttachmentsButton().click()
         this.getOnButtonFromDocTool().click()
@@ -147,6 +150,52 @@ class EmailPage {
         this.getOnMydocsWHTD().click()
         cy.wait(1000)
         this.getAndSaveAttachmentFromLetter().click()
+    }
+
+
+    removeAllInboxEmails() {
+        cy.log("Clearing the Email tab")
+        this.getMainCheckboxAtInboxPage().click()
+
+
+
+        this.getButtons().then((buttones) => {
+            const elementVal = this.getDisabledTrashCanIconElement()
+            const countOfElementsInButtons = buttones.find(elementVal, { timeout: 10000 }).length;
+
+            if (countOfElementsInButtons > 0) {
+                cy.log('Email Inbox tab is empty')
+            }
+            else {
+                this.getEnabledTrashCanicon().click()
+            }
+        })
+
+    }
+
+
+    clearInboxEmails() {
+        MainPage.getEmailTab().click()
+        this.getAnInboxButtonInTheInbox().click()
+        this.removeAllInboxEmails()
+    }
+
+    checkIfOnMailTab() {
+
+        const pageBody = new PageBody()
+
+
+        pageBody.getPageBody().then((body) => {
+            const countOfElementsInBody = body.find(this.getAnAnyListSubjectFromInbox(), { timeout: 10000 }).length;
+            if (countOfElementsInBody > 0) {
+                this.getNewEmailButton()
+                cy.log('FOUND')
+            }
+            else {
+                MainPage.getEmailTab().click()
+                cy.log('NOTFOUND')
+            }
+        })
     }
 }
 

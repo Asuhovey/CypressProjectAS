@@ -1,4 +1,4 @@
-import LohinPage from '../page-objects/LoginPage';
+import LoginPage from '../page-objects/LoginPage';
 import EmailPage from '../page-objects/EmailPage';
 import DocPage from '../page-objects/DocPage';
 import MainPage from '../page-objects/MainPage';
@@ -10,7 +10,7 @@ describe('Test Spec', () => {
   beforeEach(() => {
 
     cy.log("Start environment clearing")
-    cy.clearEnvironment()
+    MainPage.clearEnvironment()
 
   })
   it('Should do things', () => {
@@ -24,17 +24,17 @@ describe('Test Spec', () => {
       const name = 'testtesttestset'
 
       cy.log('Step 1')
-      LohinPage.login((Cypress.env('username')), (Cypress.env('password')))
+      LoginPage.login((Cypress.env('username')), (Cypress.env('password')))
 
       cy.log('Step 2')
       MainPage.getDocTab().click()
       DocPage.openDocPage()
 
       cy.log('Step 3')
-      cy.uploadNewDocumentOnDocumentPage(`${filePath}\\${attachmentName}.${attachmentExtension}`)
+      DocPage.uploadNewDocumentOnDocumentPage(`${filePath}\\${attachmentName}.${attachmentExtension}`)
 
       cy.log('Step 4')
-      cy.checkIfOnMailTab()
+      EmailPage.checkIfOnMailTab()
       EmailPage.getNewEmailButton().click()
       EmailPage.emailCompilation(email, name)
       EmailPage.pressSendButton()
@@ -45,7 +45,7 @@ describe('Test Spec', () => {
 
       cy.log('Step 6')
       MainPage.getDocTab().click()
-      cy.orDrop(DocPage.getUploadedDocFileNamepls(),1, DocPage.getTreeTrashArea())
+      cy.orDrop(DocPage.getUploadedDocFileNamepls(), 1, '#doc_tree_trash')
       cy.reload().then(() => {
         cy.checkIfNeededFileDragged(DocPage.getUploadedDocFile())
       })

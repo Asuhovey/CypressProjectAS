@@ -1,3 +1,8 @@
+import LoginPage from '../page-objects/LoginPage';
+import DocPage from './DocPage';
+import EmailPage from './EmailPage';
+
+
 class MainPage {
 
     getEmailTab() {
@@ -19,6 +24,16 @@ class MainPage {
     logout() {
         this.getProfileIcon().click()
         this.getLogOutButton().click()
+    }
+
+    clearEnvironment() {
+        cy.visit('https://mailfence.com/')
+        LoginPage.login((Cypress.env('username')), (Cypress.env('password')))
+
+        EmailPage.clearInboxEmails()
+        DocPage.clearDocuments()
+        cy.log("Environment is cleared")
+        this.logout()
     }
 }
 

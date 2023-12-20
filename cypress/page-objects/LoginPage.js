@@ -1,4 +1,4 @@
-class LohinPage {
+class LoginPage {
     visit() {
         cy.visit('https://mailfence.com/'); // Перейти на главную страницу
     }
@@ -30,4 +30,4 @@ class LohinPage {
     }
 }
 
-export default new LohinPage();
+export default new LoginPage();
