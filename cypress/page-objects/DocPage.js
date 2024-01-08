@@ -41,7 +41,10 @@ class DocPage {
   }
 
   getUploadedDocFileNamepls() {
-    return `div.GCSDBRWBAKB:contains(TestAttachment1.txt)`;
+    return cy.get(`div.GCSDBRWBAKB:contains(TestAttachment1.txt)`)
+  }
+  getUploadedDocFileNameplsss() {
+    return `div.GCSDBRWBAKB:contains(TestAttachment1.txt)`
   }
 
 
@@ -85,9 +88,9 @@ class DocPage {
   openDocPage() {
     this.getMyDocTreeitem()
   }
-  checkIfNeededFileDragged() {
+  checkIfNeededFileDragged(test) {
     const pageBody = new PageBody()
-    const uploadedFile = file
+    const uploadedFile = test
     pageBody.getPageBody().then((body) => {
       const countOfElementsInBody = body.find(uploadedFile).length;
 
@@ -97,6 +100,9 @@ class DocPage {
         cy.log('File was moved to "trash" folder, Test is PASSED')
       }
     })
+
+
+    
 
   }
 
@@ -146,6 +152,8 @@ class DocPage {
 
   }
 }
+
+
 
 
 

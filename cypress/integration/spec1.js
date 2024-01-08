@@ -45,9 +45,11 @@ describe('Test Spec', () => {
 
       cy.log('Step 6')
       MainPage.getDocTab().click()
-      cy.orDrop(DocPage.getUploadedDocFileNamepls(), 1, '#doc_tree_trash')
+      
+      DocPage.getUploadedDocFileNamepls().dragAndDrop("#doc_tree_trash")
+      //cy.orDrop(DocPage.getUploadedDocFileNamepls(), 1, DocPage.getTreeTrashArea())
       cy.reload().then(() => {
-        cy.checkIfNeededFileDragged(DocPage.getUploadedDocFile())
+        DocPage.checkIfNeededFileDragged(DocPage.getUploadedDocFileNameplsss())
       })
       cy.log('Test has been executed successfully!')
     })
